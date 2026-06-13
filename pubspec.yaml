@@ -1,0 +1,23 @@
+name: dcpl_shared
+description: Shared core (API, auth, config, utils, widgets), domain models, and theme for the DCPL Flutter apps (Admin + User).
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.1
+
+dependencies:
+  dio: ^5.9.2
+  firebase_auth: ^6.5.2
+  firebase_core: ^4.10.0
+  flutter:
+    sdk: flutter
+  get: ^4.7.3
+  intl: any
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
