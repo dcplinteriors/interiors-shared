@@ -16,5 +16,10 @@ class MaterialUnits {
     'MTR',
     'ROLL',
     'EF',
+    'KG',
+    'GRAM',
+    'SQ.FT',
+    'FT',
+    'DOZEN',
   ];
 }

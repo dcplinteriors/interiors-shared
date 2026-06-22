@@ -17,14 +17,21 @@ import 'status_colors.dart';
 /// extension and is deliberately NOT a brand colour. Both apps consume
 /// `AppTheme.light`; nothing app-specific lives here.
 abstract final class AppTheme {
-  static ThemeData get light {
-    final base = ThemeData(useMaterial3: true, colorScheme: _scheme);
-    final scheme = _scheme;
+  /// Light Molten — graphite-on-paper.
+  static ThemeData get light => _build(_lightScheme, StatusColors.standard);
+
+  /// Dark Molten — the brand gradient and crimson accent pop against deep
+  /// graphite. The apps wire both and currently lock to dark (see each app's
+  /// `MaterialApp`); switching is a single `themeMode` flip away.
+  static ThemeData get dark => _build(_darkScheme, StatusColors.dark);
+
+  static ThemeData _build(ColorScheme scheme, StatusColors statusColors) {
+    final base = ThemeData(useMaterial3: true, colorScheme: scheme);
     final text = _buildTextTheme(base.textTheme);
 
     return base.copyWith(
       scaffoldBackgroundColor: scheme.surface,
-      extensions: const [StatusColors.standard],
+      extensions: [statusColors],
       textTheme: text,
 
       // Flat "drafting" app bar: surface-coloured, hairline under-scroll.
@@ -49,8 +56,10 @@ abstract final class AppTheme {
         errorBorder: _inputBorder(scheme.error),
         focusedErrorBorder: _inputBorder(scheme.error, width: 1.6),
         isDense: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
       ),
 
       filledButtonTheme: FilledButtonThemeData(
@@ -88,8 +97,7 @@ abstract final class AppTheme {
 
       chipTheme: ChipThemeData(
         side: BorderSide.none,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: text.labelMedium?.copyWith(fontWeight: FontWeight.w600),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       ),
@@ -140,13 +148,12 @@ abstract final class AppTheme {
       ),
 
       dataTableTheme: DataTableThemeData(
-        headingRowColor:
-            WidgetStatePropertyAll(scheme.surfaceContainerLow),
+        headingRowColor: WidgetStatePropertyAll(scheme.surfaceContainerLow),
         headingTextStyle: text.labelLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: scheme.onSurfaceVariant,
-              letterSpacing: 0.2,
-            ),
+          fontWeight: FontWeight.w700,
+          color: scheme.onSurfaceVariant,
+          letterSpacing: 0.2,
+        ),
         dataTextStyle: text.bodyMedium,
         dividerThickness: 1,
       ),
@@ -155,8 +162,7 @@ abstract final class AppTheme {
         behavior: SnackBarBehavior.floating,
         backgroundColor: scheme.inverseSurface,
         contentTextStyle: TextStyle(color: scheme.onInverseSurface),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -165,7 +171,7 @@ abstract final class AppTheme {
   // Graphite foundation (primary = steel) + crimson brand accent (tertiary).
   // `final`, not `const`: MaterialColor shade access (`.shade800`) is a runtime
   // getter, so the scheme is built once at first use rather than at compile time.
-  static final ColorScheme _scheme = ColorScheme(
+  static final ColorScheme _lightScheme = ColorScheme(
     brightness: Brightness.light,
 
     primary: AppPalette.steel.shade800, // graphite
@@ -209,6 +215,60 @@ abstract final class AppTheme {
     surfaceTint: AppPalette.steel.shade800,
   );
 
+  // --- Hand-authored Material 3 dark scheme (Molten) ------------------------
+  // Deep-graphite surfaces (scaffold darkest, cards/containers step lighter to
+  // pop) with a LIGHT neutral `primary` (default filled buttons) and a BRIGHT
+  // crimson `tertiary` — the brand glows against the dark. Status semantics live
+  // in `StatusColors.dark`.
+  static final ColorScheme _darkScheme = ColorScheme(
+    brightness: Brightness.dark,
+
+    primary:
+        AppPalette.steel.shade100, // light neutral (default filled buttons)
+    onPrimary: const Color(0xFF0F1217),
+    primaryContainer: AppPalette.steel.shade700,
+    onPrimaryContainer: const Color(0xFFDCE3E8),
+
+    secondary: AppPalette.steel.shade300,
+    onSecondary: const Color(0xFF0F1217),
+    secondaryContainer: AppPalette.steel.shade800,
+    onSecondaryContainer: const Color(0xFFD6DEE2),
+
+    tertiary: AppPalette.crimson.shade400, // bright crimson — pops on dark
+    onTertiary: const Color(0xFF40000E),
+    tertiaryContainer: const Color(0xFF3C1019), // deep-crimson nav pill
+    onTertiaryContainer: AppPalette.crimson.shade200,
+
+    error: const Color(0xFFF2655B),
+    onError: const Color(0xFF470A05),
+    errorContainer: const Color(0xFF5C1A12),
+    onErrorContainer: const Color(0xFFF8D7D0),
+
+    surface: const Color(
+      0xFF0F1217,
+    ), // deep near-black so the molten accent glows
+    onSurface: const Color(0xFFECEFF2),
+    onSurfaceVariant: const Color(0xFF939DA7), // cool muted grey
+    surfaceContainerLowest: const Color(
+      0xFF181C22,
+    ), // cards float above scaffold
+    surfaceContainerLow: const Color(0xFF1C2027),
+    surfaceContainer: const Color(0xFF21262D),
+    surfaceContainerHigh: const Color(0xFF272D35), // table header band
+    surfaceContainerHighest: const Color(0xFF2F3640),
+
+    outline: const Color(0xFF5B646E),
+    outlineVariant: const Color(0xFF282E36), // thin, low-contrast hairline
+
+    inverseSurface: const Color(0xFFE6EAED),
+    onInverseSurface: const Color(0xFF0F1217),
+    inversePrimary: AppPalette.steel.shade700,
+
+    shadow: const Color(0xFF000000),
+    scrim: const Color(0xFF000000),
+    surfaceTint: AppPalette.steel.shade300, // subtle light tint on elevation
+  );
+
   // --- Typography: Sora (display/titles) over Inter (body/data) -------------
   // Inter carries everything legibility-critical (body, labels, numerics); Sora
   // gives display & title sizes the engineered, geometric voice of the logo.
@@ -223,35 +283,88 @@ abstract final class AppTheme {
       required FontWeight weight,
       double tracking = 0,
       double height = 1.12,
-    }) =>
-        GoogleFonts.sora(
-          textStyle: s,
-          fontSize: size,
-          fontWeight: weight,
-          letterSpacing: tracking,
-          height: height,
-        );
+    }) => GoogleFonts.sora(
+      textStyle: s,
+      fontSize: size,
+      fontWeight: weight,
+      letterSpacing: tracking,
+      height: height,
+    );
 
     return inter.copyWith(
       // Display & headline — Sora, the engineered voice of the logo. Page titles
       // land on displaySmall; section titles on headlineSmall.
-      displayLarge: sora(inter.displayLarge, size: 40, weight: FontWeight.w800, tracking: -0.6, height: 1.02),
-      displayMedium: sora(inter.displayMedium, size: 34, weight: FontWeight.w800, tracking: -0.5, height: 1.04),
-      displaySmall: sora(inter.displaySmall, size: 30, weight: FontWeight.w800, tracking: -0.5, height: 1.06),
-      headlineLarge: sora(inter.headlineLarge, size: 26, weight: FontWeight.w700, tracking: -0.4, height: 1.1),
-      headlineMedium: sora(inter.headlineMedium, size: 22, weight: FontWeight.w700, tracking: -0.3, height: 1.15),
-      headlineSmall: sora(inter.headlineSmall, size: 19, weight: FontWeight.w700, tracking: -0.2, height: 1.2),
+      displayLarge: sora(
+        inter.displayLarge,
+        size: 40,
+        weight: FontWeight.w800,
+        tracking: -0.6,
+        height: 1.02,
+      ),
+      displayMedium: sora(
+        inter.displayMedium,
+        size: 34,
+        weight: FontWeight.w800,
+        tracking: -0.5,
+        height: 1.04,
+      ),
+      displaySmall: sora(
+        inter.displaySmall,
+        size: 30,
+        weight: FontWeight.w800,
+        tracking: -0.5,
+        height: 1.06,
+      ),
+      headlineLarge: sora(
+        inter.headlineLarge,
+        size: 26,
+        weight: FontWeight.w700,
+        tracking: -0.4,
+        height: 1.1,
+      ),
+      headlineMedium: sora(
+        inter.headlineMedium,
+        size: 22,
+        weight: FontWeight.w700,
+        tracking: -0.3,
+        height: 1.15,
+      ),
+      headlineSmall: sora(
+        inter.headlineSmall,
+        size: 19,
+        weight: FontWeight.w700,
+        tracking: -0.2,
+        height: 1.2,
+      ),
       // Titles — Sora for app-bar and card headings.
-      titleLarge: sora(inter.titleLarge, size: 18, weight: FontWeight.w700, tracking: -0.1, height: 1.25),
-      titleMedium: sora(inter.titleMedium, size: 16, weight: FontWeight.w700, tracking: -0.05, height: 1.3),
+      titleLarge: sora(
+        inter.titleLarge,
+        size: 18,
+        weight: FontWeight.w700,
+        tracking: -0.1,
+        height: 1.25,
+      ),
+      titleMedium: sora(
+        inter.titleMedium,
+        size: 16,
+        weight: FontWeight.w700,
+        tracking: -0.05,
+        height: 1.3,
+      ),
       // Body & data — Inter, tuned for comfortable reading line-heights.
       bodyLarge: inter.bodyLarge?.copyWith(fontSize: 15.5, height: 1.5),
       bodyMedium: inter.bodyMedium?.copyWith(fontSize: 14.5, height: 1.5),
       bodySmall: inter.bodySmall?.copyWith(fontSize: 13, height: 1.45),
       // Labels — buttons, chips, field labels (the eyebrow is tracked at usage).
-      labelLarge: inter.labelLarge?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
+      labelLarge: inter.labelLarge?.copyWith(
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.2,
+      ),
       labelMedium: inter.labelMedium?.copyWith(fontWeight: FontWeight.w600),
-      labelSmall: inter.labelSmall?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.5),
+      labelSmall: inter.labelSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.5,
+      ),
     );
   }
 
@@ -261,9 +374,12 @@ abstract final class AppTheme {
         borderSide: BorderSide(color: color, width: width),
       );
 
-  static final RoundedRectangleBorder _buttonShape =
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
+  static final RoundedRectangleBorder _buttonShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+  );
 
-  static const TextStyle _buttonText =
-      TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.1);
+  static const TextStyle _buttonText = TextStyle(
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.1,
+  );
 }

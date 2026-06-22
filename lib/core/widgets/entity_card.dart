@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 @immutable
 class EntityField {
   const EntityField(this.label, {this.text, this.child, this.muted = false})
-      : assert(text != null || child != null, 'EntityField needs text or child');
+    : assert(text != null || child != null, 'EntityField needs text or child');
 
   final String label;
   final String? text;
@@ -73,10 +73,7 @@ class EntityCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 10),
-                trailing!,
-              ],
+              if (trailing != null) ...[const SizedBox(width: 10), trailing!],
             ],
           ),
           if (fields.isNotEmpty) ...[
@@ -132,17 +129,21 @@ class _FieldGrid extends StatelessWidget {
     final rows = <Widget>[];
     for (var i = 0; i < fields.length; i += 2) {
       final hasRight = i + 1 < fields.length;
-      rows.add(Padding(
-        padding: EdgeInsets.only(top: i == 0 ? 0 : 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: _block(fields[i])),
-            const SizedBox(width: 18),
-            Expanded(child: hasRight ? _block(fields[i + 1]) : const SizedBox()),
-          ],
+      rows.add(
+        Padding(
+          padding: EdgeInsets.only(top: i == 0 ? 0 : 14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _block(fields[i])),
+              const SizedBox(width: 18),
+              Expanded(
+                child: hasRight ? _block(fields[i + 1]) : const SizedBox(),
+              ),
+            ],
+          ),
         ),
-      ));
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -151,26 +152,24 @@ class _FieldGrid extends StatelessWidget {
   }
 
   Widget _block(EntityField f) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            f.label.toUpperCase(),
-            style: theme.textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
-              color: muted,
-            ),
-          ),
-          const SizedBox(height: 3),
-          DefaultTextStyle.merge(
-            style: theme.textTheme.bodyMedium ?? const TextStyle(),
-            child: f.child ??
-                Text(
-                  f.text!,
-                  style: f.muted ? TextStyle(color: muted) : null,
-                ),
-          ),
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        f.label.toUpperCase(),
+        style: theme.textTheme.labelSmall?.copyWith(
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
+          color: muted,
+        ),
+      ),
+      const SizedBox(height: 3),
+      DefaultTextStyle.merge(
+        style: theme.textTheme.bodyMedium ?? const TextStyle(),
+        child:
+            f.child ??
+            Text(f.text!, style: f.muted ? TextStyle(color: muted) : null),
+      ),
+    ],
+  );
 }

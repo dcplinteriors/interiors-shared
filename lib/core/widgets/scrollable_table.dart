@@ -43,22 +43,22 @@ class _ScrollableTableState extends State<ScrollableTable> {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: Scrollbar(
-          controller: _horizontal,
-          thumbVisibility: true,
-          child: SingleChildScrollView(
-            controller: _horizontal,
-            scrollDirection: Axis.horizontal,
-            child: SingleChildScrollView(
-              controller: _vertical,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: widget.width),
-                child: widget.child,
-              ),
-            ),
+    width: widget.width,
+    height: widget.height,
+    child: Scrollbar(
+      controller: _horizontal,
+      thumbVisibility: true,
+      child: SingleChildScrollView(
+        controller: _horizontal,
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          controller: _vertical,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: widget.width),
+            child: widget.child,
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

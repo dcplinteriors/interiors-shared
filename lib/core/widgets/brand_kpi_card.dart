@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/app_palette.dart';
 import '../../theme/brand_gradient.dart';
 
 /// A dashboard stat tile.
@@ -60,9 +61,9 @@ class BrandKpiCard extends StatelessWidget {
     );
 
     return Material(
-      // Featured tiles sit on graphite (the scheme's inverseSurface == steel
-      // 800); plain tiles on the lowest paper surface with a hairline.
-      color: featured ? cs.inverseSurface : cs.surfaceContainerLowest,
+      // Featured tiles always sit on graphite (steel 800) so the molten glow
+      // reads in BOTH light and dark; plain tiles on the lowest surface + hairline.
+      color: featured ? AppPalette.steel.shade800 : cs.surfaceContainerLowest,
       borderRadius: radius,
       clipBehavior: Clip.antiAlias,
       shape: featured

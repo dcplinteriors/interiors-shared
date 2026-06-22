@@ -21,14 +21,14 @@ class RefreshButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => IconButton(
-        tooltip: tooltip,
-        onPressed: isRefreshing ? null : onPressed,
-        icon: isRefreshing
-            ? const SizedBox(
-                height: 18,
-                width: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : const Icon(Icons.refresh),
-      );
+    tooltip: tooltip,
+    onPressed: isRefreshing ? null : onPressed,
+    icon: isRefreshing
+        ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+        : const Icon(Icons.refresh),
+  );
 }

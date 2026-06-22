@@ -12,13 +12,13 @@ class Eyebrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        text.toUpperCase(),
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.6,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-      );
+    text.toUpperCase(),
+    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+      fontWeight: FontWeight.w700,
+      letterSpacing: 1.6,
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+    ),
+  );
 }
 
 /// The standard list-screen header: an [eyebrow] → a large Sora [title] (with an
@@ -49,10 +49,7 @@ class PageHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (eyebrow != null) ...[
-          Eyebrow(eyebrow!),
-          const SizedBox(height: 8),
-        ],
+        if (eyebrow != null) ...[Eyebrow(eyebrow!), const SizedBox(height: 8)],
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
@@ -104,10 +101,7 @@ class PageHeader extends StatelessWidget {
             ],
           ],
         ),
-        if (stats != null) ...[
-          const SizedBox(height: 22),
-          stats!,
-        ],
+        if (stats != null) ...[const SizedBox(height: 22), stats!],
       ],
     );
   }

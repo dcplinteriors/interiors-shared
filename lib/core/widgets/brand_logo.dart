@@ -1,61 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme/brand_gradient.dart';
+/// Asset paths for the official DCPL logo artwork (gradient wordmark on a
+/// transparent background — drops straight onto the dark theme).
+class BrandAssets {
+  BrandAssets._();
 
-/// The DCPL wordmark, painted with the Molten gradient via a [ShaderMask].
+  /// Wordmark only ("DCPL").
+  static const logo = 'packages/dcpl_shared/assets/branding/dcpl_logo.png';
+
+  /// Wordmark + "Diverse Creation Private Limited" tagline — the full lock-up.
+  static const brand = 'packages/dcpl_shared/assets/branding/dcpl_brand.png';
+}
+
+/// The DCPL brand logo — renders the official gradient artwork (PNG), never
+/// text. [tagline] = false → the wordmark ([BrandAssets.logo]); true → the full
+/// lock-up with the company name ([BrandAssets.brand]).
 ///
-/// Reproduces the logo in code (no image asset to manage / rescale). Use large
-/// on the login & splash hero; smaller inline where the brand should sign a
-/// surface. Set [showTagline] for the "Diverse Creation Private Limited" line.
+/// Sized by [height]; width scales to the asset's aspect ratio. Use the lock-up
+/// (tagline) on the login & splash hero; the plain wordmark in compact spots
+/// such as the nav header.
 class BrandWordmark extends StatelessWidget {
-  const BrandWordmark({super.key, this.fontSize = 44, this.showTagline = false});
+  const BrandWordmark({super.key, this.height = 40, this.tagline = false});
 
-  final double fontSize;
-  final bool showTagline;
+  final double height;
+  final bool tagline;
 
   @override
   Widget build(BuildContext context) {
-    final wordmark = ShaderMask(
-      blendMode: BlendMode.srcIn,
-      shaderCallback: (bounds) => BrandGradient.horizontal.createShader(bounds),
-      child: Text(
-        'DCPL',
-        style: GoogleFonts.sora(
-          fontSize: fontSize,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -fontSize * 0.04,
-          height: 1,
-          color: Colors.white, // masked by the gradient shader
-        ),
-      ),
-    );
-
-    if (!showTagline) return wordmark;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        wordmark,
-        SizedBox(height: fontSize * 0.16),
-        Text(
-          'DIVERSE CREATION PRIVATE LIMITED',
-          style: GoogleFonts.inter(
-            fontSize: fontSize * 0.16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 2.4,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ],
+    return Image.asset(
+      tagline ? BrandAssets.brand : BrandAssets.logo,
+      height: height,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.medium,
+      semanticLabel: 'DCPL',
     );
   }
 }
 
-/// A compact square brand mark — gradient tile with the logo's "D".
-///
-/// For app-bar leadings and tight spots where the full wordmark won't fit.
+/// A compact brand mark for tight, width-constrained spots (e.g. an app-bar
+/// leading): the DCPL wordmark scaled to fit within a [size]-tall box, never
+/// overflowing. Prefer [BrandWordmark] where horizontal room allows.
 class BrandMark extends StatelessWidget {
   const BrandMark({super.key, this.size = 28});
 
@@ -63,22 +47,13 @@ class BrandMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
+    return SizedBox(
       height: size,
-      decoration: BoxDecoration(
-        gradient: BrandGradient.diagonal,
-        borderRadius: BorderRadius.circular(size * 0.26),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        'D',
-        style: GoogleFonts.sora(
-          color: Colors.white,
-          fontWeight: FontWeight.w800,
-          fontSize: size * 0.56,
-          height: 1,
-        ),
+      child: Image.asset(
+        BrandAssets.logo,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.medium,
+        semanticLabel: 'DCPL',
       ),
     );
   }

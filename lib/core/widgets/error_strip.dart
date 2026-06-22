@@ -20,7 +20,12 @@ class ErrorStrip extends StatelessWidget {
         children: [
           Icon(Icons.error_outline, size: 18, color: scheme.onErrorContainer),
           const SizedBox(width: 8),
-          Expanded(child: Text(message, style: TextStyle(color: scheme.onErrorContainer))),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(color: scheme.onErrorContainer),
+            ),
+          ),
         ],
       ),
     );

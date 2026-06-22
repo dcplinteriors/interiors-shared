@@ -26,8 +26,7 @@ abstract final class Breakpoints {
 /// Ergonomic form-factor access off the build context. Reads the current
 /// window width via [MediaQuery] (rebuilds on resize / rotation).
 extension ResponsiveX on BuildContext {
-  FormFactor get formFactor =>
-      Breakpoints.of(MediaQuery.sizeOf(this).width);
+  FormFactor get formFactor => Breakpoints.of(MediaQuery.sizeOf(this).width);
 
   /// Phone-sized: use cards, bottom nav, tighter spacing.
   bool get isCompact => formFactor == FormFactor.compact;
@@ -40,8 +39,8 @@ extension ResponsiveX on BuildContext {
 
   /// Standard page padding that scales with the form factor.
   EdgeInsets get pagePadding => switch (formFactor) {
-        FormFactor.compact => const EdgeInsets.all(16),
-        FormFactor.medium => const EdgeInsets.all(20),
-        FormFactor.expanded => const EdgeInsets.all(24),
-      };
+    FormFactor.compact => const EdgeInsets.all(16),
+    FormFactor.medium => const EdgeInsets.all(20),
+    FormFactor.expanded => const EdgeInsets.all(24),
+  };
 }

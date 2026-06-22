@@ -1,9 +1,10 @@
+import 'package:dcpl_shared/core/auth/token_source.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 /// Wraps Firebase Auth — the apps' only Firebase touch-point. Signs the user in and
 /// exposes the ID token; all data access goes through the backend API with that token.
-class AuthService extends GetxService {
+class AuthService extends GetxService implements TokenSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User? get currentUser => _auth.currentUser;
@@ -18,6 +19,7 @@ class AuthService extends GetxService {
   Future<void> signOut() => _auth.signOut();
 
   /// Current Firebase ID token (refreshed by the SDK as needed), or null if signed out.
+  @override
   Future<String?> idToken() {
     final user = _auth.currentUser;
     if (user == null) return Future.value(null);

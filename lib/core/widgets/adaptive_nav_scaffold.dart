@@ -56,11 +56,7 @@ class AdaptiveNavScaffold extends StatelessWidget {
     final compact = context.isCompact;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: leading,
-        title: Text(title),
-        actions: actions,
-      ),
+      appBar: AppBar(leading: leading, title: Text(title), actions: actions),
       body: compact
           ? body
           : Row(
@@ -88,18 +84,18 @@ class AdaptiveNavScaffold extends StatelessWidget {
   }
 
   Widget _rail(BuildContext context) => NavigationRail(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: onDestinationSelected,
-        labelType: context.isExpanded
-            ? NavigationRailLabelType.all
-            : NavigationRailLabelType.selected,
-        destinations: [
-          for (final d in destinations)
-            NavigationRailDestination(
-              icon: Icon(d.icon),
-              selectedIcon: Icon(d.selectedIcon),
-              label: Text(d.label),
-            ),
-        ],
-      );
+    selectedIndex: selectedIndex,
+    onDestinationSelected: onDestinationSelected,
+    labelType: context.isExpanded
+        ? NavigationRailLabelType.all
+        : NavigationRailLabelType.selected,
+    destinations: [
+      for (final d in destinations)
+        NavigationRailDestination(
+          icon: Icon(d.icon),
+          selectedIcon: Icon(d.selectedIcon),
+          label: Text(d.label),
+        ),
+    ],
+  );
 }

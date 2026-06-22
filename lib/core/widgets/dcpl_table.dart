@@ -101,7 +101,9 @@ class DcplTable extends StatelessWidget {
               columns[i],
               Text(
                 columns[i].label.toUpperCase(),
-                textAlign: columns[i].numeric ? TextAlign.right : TextAlign.left,
+                textAlign: columns[i].numeric
+                    ? TextAlign.right
+                    : TextAlign.left,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: cs.onSurfaceVariant,
@@ -224,8 +226,8 @@ class _TableRowState extends State<_TableRow> {
     final bg = r.selected
         ? cs.tertiaryContainer.withValues(alpha: 0.55)
         : _hover
-            ? cs.surfaceContainerLow
-            : Colors.transparent;
+        ? cs.surfaceContainerLow
+        : Colors.transparent;
     final rail = r.selected ? cs.tertiary : (r.railColor ?? Colors.transparent);
 
     Widget cell(int i) {
@@ -270,10 +272,17 @@ class _TableRowState extends State<_TableRow> {
                     AnimatedOpacity(
                       opacity: _hover ? 1 : 0,
                       duration: const Duration(milliseconds: 120),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: r.actions),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: r.actions,
+                      ),
                     ),
                   if (r.onTap != null)
-                    Icon(Icons.chevron_right, color: cs.onSurfaceVariant, size: 20),
+                    Icon(
+                      Icons.chevron_right,
+                      color: cs.onSurfaceVariant,
+                      size: 20,
+                    ),
                 ],
               ),
             ),
@@ -336,9 +345,10 @@ class SkeletonRow extends StatefulWidget {
 
 class _SkeletonRowState extends State<SkeletonRow>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1300))
-        ..repeat();
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1300),
+  )..repeat();
 
   @override
   void dispose() {
@@ -358,13 +368,13 @@ class _SkeletonRowState extends State<SkeletonRow>
           final hi = cs.surfaceContainerLow;
           final shimmer = Color.lerp(base, hi, _c.value) ?? base;
           Widget bar(double w, double h) => Container(
-                width: w,
-                height: h,
-                decoration: BoxDecoration(
-                  color: shimmer,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-              );
+            width: w,
+            height: h,
+            decoration: BoxDecoration(
+              color: shimmer,
+              borderRadius: BorderRadius.circular(6),
+            ),
+          );
           return Row(
             children: [
               Expanded(
@@ -372,7 +382,13 @@ class _SkeletonRowState extends State<SkeletonRow>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    bar(MediaQuery.sizeOf(context).width * 0.18 * widget.widthFraction + 80, 12),
+                    bar(
+                      MediaQuery.sizeOf(context).width *
+                              0.18 *
+                              widget.widthFraction +
+                          80,
+                      12,
+                    ),
                     const SizedBox(height: 8),
                     bar(90, 9),
                   ],

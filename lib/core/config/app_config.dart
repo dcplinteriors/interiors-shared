@@ -11,7 +11,11 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 /// ships pointing at production — with `--dart-define` still able to override both.
 class AppConfig {
   static const String _localBaseUrl = 'http://localhost:8080/api';
-  static const String _prodBaseUrl = 'https://interiors-backend.onrender.com/api';
+  static const String _prodBaseUrl =
+      'https://interiors-backend.onrender.com/api';
 
-  static const String apiBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: kDebugMode ? _localBaseUrl : _prodBaseUrl);
+  static const String apiBaseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: kDebugMode ? _localBaseUrl : _prodBaseUrl,
+  );
 }

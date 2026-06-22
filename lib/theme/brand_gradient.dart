@@ -44,8 +44,7 @@ abstract final class BrandGradient {
   static LinearGradient custom({
     AlignmentGeometry begin = Alignment.centerLeft,
     AlignmentGeometry end = Alignment.centerRight,
-  }) =>
-      LinearGradient(begin: begin, end: end, colors: stops, stops: _stops);
+  }) => LinearGradient(begin: begin, end: end, colors: stops, stops: _stops);
 
   /// A faint molten wash for soft brand surfaces (selected nav tint, soft
   /// banners). Built from the ramp's lightest tints so ink stays legible on it.

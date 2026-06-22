@@ -27,8 +27,9 @@ class PrimaryCell extends StatelessWidget {
             padding: const EdgeInsets.only(top: 2),
             child: Text(
               subtitle!,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -86,9 +87,7 @@ class AssigneePellet extends StatelessWidget {
             assigned ? name! : fallback,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: assigned
-                ? null
-                : TextStyle(color: cs.onSurfaceVariant),
+            style: assigned ? null : TextStyle(color: cs.onSurfaceVariant),
           ),
         ),
       ],
@@ -96,8 +95,11 @@ class AssigneePellet extends StatelessWidget {
   }
 
   static String _initials(String name) {
-    final parts =
-        name.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    final parts = name
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
     if (parts.isEmpty) return '?';
     if (parts.length == 1) {
       return parts.first.characters.take(2).toString().toUpperCase();
