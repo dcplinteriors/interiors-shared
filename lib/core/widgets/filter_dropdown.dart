@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 /// One option in a [FilterDropdown] — its [value] and the label shown for it.
+///
+/// [swatch] optionally tints a small leading dot before the label (e.g. a status
+/// filter colour-coding each state); options without one render as plain text.
 class FilterOption<T> {
-  const FilterOption(this.value, this.label);
+  const FilterOption(this.value, this.label, {this.swatch});
   final T value;
   final String label;
+  final Color? swatch;
 }
 
 /// A compact bordered dropdown for list filters (status / project / work order …).
@@ -72,13 +76,36 @@ class FilterDropdown<T> extends StatelessWidget {
         ),
         items: [
           for (final option in options)
-            DropdownMenuItem(
-              value: option.value,
-              child: Text(option.label, overflow: TextOverflow.ellipsis),
-            ),
+            DropdownMenuItem(value: option.value, child: _OptionLabel(option)),
         ],
         onChanged: enabled ? (v) => onChanged(v as T) : null,
       ),
+    );
+  }
+}
+
+/// An option's label, prefixed with a small colour dot when it carries a
+/// [FilterOption.swatch]. Shared by the menu items and the collapsed field.
+class _OptionLabel<T> extends StatelessWidget {
+  const _OptionLabel(this.option);
+
+  final FilterOption<T> option;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Text(option.label, overflow: TextOverflow.ellipsis);
+    final swatch = option.swatch;
+    if (swatch == null) return text;
+    return Row(
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(color: swatch, shape: BoxShape.circle),
+        ),
+        Flexible(child: text),
+      ],
     );
   }
 }
