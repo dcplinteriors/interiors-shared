@@ -30,10 +30,10 @@ class StatusColor {
 /// which localized label go with a status is an app/l10n concern and stays in
 /// each app's chip widget.
 ///
-/// The 8 material-request statuses each get a named slot (so their colours can
+/// The material-request statuses each get a named slot (so their colours can
 /// be tuned independently), even where the initial colour is shared with a
-/// sibling — `accepted`/`closed` are positive (green), `declined`/`returned`
-/// are negative (red), `cancelled`/`superseded` are dormant (grey).
+/// sibling — `accepted`/`closed` are positive (green), `declined` is negative
+/// (red), `cancelled` is dormant (grey).
 @immutable
 class StatusColors extends ThemeExtension<StatusColors> {
   const StatusColors({
@@ -41,10 +41,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
     required this.processing,
     required this.accepted,
     required this.closed,
-    required this.returned,
     required this.declined,
     required this.cancelled,
-    required this.superseded,
     required this.active,
     required this.completed,
     required this.warning,
@@ -56,10 +54,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
   final StatusColor processing;
   final StatusColor accepted;
   final StatusColor closed;
-  final StatusColor returned;
   final StatusColor declined;
   final StatusColor cancelled;
-  final StatusColor superseded;
 
   // Work-order / project statuses + generic signals.
   final StatusColor active;
@@ -73,10 +69,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
     processing: StatusColor(AppPalette.amberSurface, AppPalette.amberInk),
     accepted: StatusColor(AppPalette.greenSurface, AppPalette.greenInk),
     closed: StatusColor(AppPalette.greenSurface, AppPalette.greenInk),
-    returned: StatusColor(AppPalette.redSurface, AppPalette.redInk),
     declined: StatusColor(AppPalette.redSurface, AppPalette.redInk),
     cancelled: StatusColor(AppPalette.greySurface, AppPalette.greyInk),
-    superseded: StatusColor(AppPalette.greySurface, AppPalette.greyInk),
     active: StatusColor(AppPalette.infoSurface, AppPalette.infoInk),
     completed: StatusColor(AppPalette.greenSurface, AppPalette.greenInk),
     warning: StatusColor(AppPalette.amberSurface, AppPalette.amberInk),
@@ -90,10 +84,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
     processing: StatusColor(Color(0xFF45330F), Color(0xFFF2C277)),
     accepted: StatusColor(Color(0xFF143A28), Color(0xFF7FE0A6)),
     closed: StatusColor(Color(0xFF143A28), Color(0xFF7FE0A6)),
-    returned: StatusColor(Color(0xFF4A1A15), Color(0xFFF4A79E)),
     declined: StatusColor(Color(0xFF4A1A15), Color(0xFFF4A79E)),
     cancelled: StatusColor(Color(0xFF2A3037), Color(0xFFB4BDC6)),
-    superseded: StatusColor(Color(0xFF2A3037), Color(0xFFB4BDC6)),
     active: StatusColor(Color(0xFF0E353D), Color(0xFF7FDDEC)),
     completed: StatusColor(Color(0xFF143A28), Color(0xFF7FE0A6)),
     warning: StatusColor(Color(0xFF45330F), Color(0xFFF2C277)),
@@ -107,10 +99,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
     'processing' => processing,
     'accepted' => accepted,
     'closed' => closed,
-    'returned' => returned,
     'declined' => declined,
     'cancelled' => cancelled,
-    'superseded' => superseded,
     _ => neutral,
   };
 
@@ -136,10 +126,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
     StatusColor? processing,
     StatusColor? accepted,
     StatusColor? closed,
-    StatusColor? returned,
     StatusColor? declined,
     StatusColor? cancelled,
-    StatusColor? superseded,
     StatusColor? active,
     StatusColor? completed,
     StatusColor? warning,
@@ -149,10 +137,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
     processing: processing ?? this.processing,
     accepted: accepted ?? this.accepted,
     closed: closed ?? this.closed,
-    returned: returned ?? this.returned,
     declined: declined ?? this.declined,
     cancelled: cancelled ?? this.cancelled,
-    superseded: superseded ?? this.superseded,
     active: active ?? this.active,
     completed: completed ?? this.completed,
     warning: warning ?? this.warning,
@@ -167,10 +153,8 @@ class StatusColors extends ThemeExtension<StatusColors> {
       processing: StatusColor.lerp(processing, other.processing, t),
       accepted: StatusColor.lerp(accepted, other.accepted, t),
       closed: StatusColor.lerp(closed, other.closed, t),
-      returned: StatusColor.lerp(returned, other.returned, t),
       declined: StatusColor.lerp(declined, other.declined, t),
       cancelled: StatusColor.lerp(cancelled, other.cancelled, t),
-      superseded: StatusColor.lerp(superseded, other.superseded, t),
       active: StatusColor.lerp(active, other.active, t),
       completed: StatusColor.lerp(completed, other.completed, t),
       warning: StatusColor.lerp(warning, other.warning, t),

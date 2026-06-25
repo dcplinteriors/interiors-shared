@@ -35,7 +35,7 @@ class Attachments {
 /// A material request — one requested item under a **work order** (mirrors the backend
 /// `materialRequests` view). Several items submitted together share a `batchId`; each is acted on
 /// independently. The admin fills `expectedDate`/`vendor`/`poNumber?`/`remarks` when assigning the
-/// vendor; the supervisor provides `returnReason` on return.
+/// vendor.
 class MaterialRequest {
   const MaterialRequest({
     required this.id,
@@ -57,7 +57,8 @@ class MaterialRequest {
     this.vendor,
     this.poNumber,
     this.remarks,
-    this.returnReason,
+    this.closeNote,
+    this.billImages = const [],
     this.workOrderName,
     this.workOrderNumber,
     this.projectName,
@@ -89,7 +90,10 @@ class MaterialRequest {
         vendor: json['vendor'] as String?,
         poNumber: json['poNumber'] as String?,
         remarks: json['remarks'] as String?,
-        returnReason: json['returnReason'] as String?,
+        closeNote: json['closeNote'] as String?,
+        billImages:
+            (json['billImages'] as List<dynamic>?)?.cast<String>() ??
+            const [],
         workOrderName: json['workOrderName'] as String?,
         workOrderNumber: json['workOrderNumber'] as String?,
         projectName: json['projectName'] as String?,
@@ -131,8 +135,12 @@ class MaterialRequest {
   final String? poNumber;
   final String? remarks;
 
-  // Supervisor, on return.
-  final String? returnReason;
+  // Supervisor, on close.
+  /// Optional note the supervisor adds when closing. Separate from admin `remarks`.
+  final String? closeNote;
+
+  /// Storage paths of the bill image(s) attached on close (at least one).
+  final List<String> billImages;
 
   // Denormalized for display (resolved by the backend).
   final String? workOrderName;
@@ -145,8 +153,8 @@ class MaterialRequest {
   /// The supervisor may cancel only while `requested`.
   bool get canCancel => status == MaterialRequestStatus.requested;
 
-  /// The supervisor may close or return only an `accepted` (delivered) item.
-  bool get canCloseOrReturn => status == MaterialRequestStatus.accepted;
+  /// The supervisor may close only an `accepted` (delivered) item.
+  bool get canClose => status == MaterialRequestStatus.accepted;
 
   /// `5` not `5.0`; keeps a decimal only when present (e.g. `2.5`).
   String get quantityLabel => quantity == quantity.truncate()

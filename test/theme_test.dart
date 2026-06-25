@@ -18,10 +18,8 @@ void main() {
         (light.processing, dark.processing),
         (light.accepted, dark.accepted),
         (light.closed, dark.closed),
-        (light.returned, dark.returned),
         (light.declined, dark.declined),
         (light.cancelled, dark.cancelled),
-        (light.superseded, dark.superseded),
         (light.active, dark.active),
         (light.completed, dark.completed),
         (light.warning, dark.warning),
@@ -42,10 +40,8 @@ void main() {
         StatusColors.dark.processing,
         StatusColors.dark.accepted,
         StatusColors.dark.closed,
-        StatusColors.dark.returned,
         StatusColors.dark.declined,
         StatusColors.dark.cancelled,
-        StatusColors.dark.superseded,
         StatusColors.dark.warning,
         StatusColors.dark.neutral,
       ]) {
@@ -64,10 +60,8 @@ void main() {
     expect(s.forRequest(MaterialRequestStatus.processing.wire), s.processing);
     expect(s.forRequest(MaterialRequestStatus.accepted.wire), s.accepted);
     expect(s.forRequest(MaterialRequestStatus.closed.wire), s.closed);
-    expect(s.forRequest(MaterialRequestStatus.returned.wire), s.returned);
     expect(s.forRequest(MaterialRequestStatus.declined.wire), s.declined);
     expect(s.forRequest(MaterialRequestStatus.cancelled.wire), s.cancelled);
-    expect(s.forRequest(MaterialRequestStatus.superseded.wire), s.superseded);
     expect(s.forRequest('bogus'), s.neutral);
   });
 
@@ -87,7 +81,6 @@ void main() {
     expect(MaterialRequestStatus.requested.isOpen, isTrue);
     expect(MaterialRequestStatus.accepted.isOpen, isTrue);
     expect(MaterialRequestStatus.closed.isTerminal, isTrue);
-    expect(MaterialRequestStatus.superseded.isTerminal, isTrue);
     expect(WorkOrderStatus.completed.isTerminal, isTrue);
     expect(WorkOrderStatus.pending.isTerminal, isFalse);
   });

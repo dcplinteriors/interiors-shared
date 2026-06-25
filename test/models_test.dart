@@ -90,7 +90,7 @@ void main() {
     expect(m.status.isOpen, isTrue);
     expect(m.supervisorId, isNull);
     expect(m.canCancel, isFalse);
-    expect(m.canCloseOrReturn, isFalse);
+    expect(m.canClose, isFalse);
     expect(m.quantityLabel, '2.5');
     expect(m.attachments.photos, ['a.jpg']);
   });

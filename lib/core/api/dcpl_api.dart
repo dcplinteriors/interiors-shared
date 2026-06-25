@@ -271,11 +271,15 @@ class MaterialRequestsApi {
   Future<MaterialRequest> cancel(String id) async =>
       _one(await _api.post('/material-requests/$id/cancel'));
 
-  Future<MaterialRequest> close(String id) async =>
-      _one(await _api.post('/material-requests/$id/close'));
-
-  Future<MaterialRequest> returnItem(String id, String reason) async => _one(
-    await _api.post('/material-requests/$id/return', body: {'reason': reason}),
+  Future<MaterialRequest> close(
+    String id, {
+    required List<String> billImages,
+    String? note,
+  }) async => _one(
+    await _api.post(
+      '/material-requests/$id/close',
+      body: {'billImages': billImages, 'note': ?note},
+    ),
   );
 
   MaterialRequest _one(dynamic json) =>

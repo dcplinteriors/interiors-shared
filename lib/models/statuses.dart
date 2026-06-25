@@ -5,10 +5,8 @@ enum MaterialRequestStatus {
   processing,
   accepted,
   closed,
-  returned,
   declined,
-  cancelled,
-  superseded;
+  cancelled;
 
   /// Parses the backend wire value — the enum name matches it 1:1.
   static MaterialRequestStatus fromWire(String value) => values.byName(value);

@@ -359,21 +359,25 @@ void main() {
       expect(adapter.capturedBody, {'remarks': 'no stock'});
     });
 
-    test('cancel/close → POST /:id/cancel and /close, no body', () async {
+    test('cancel → POST /:id/cancel, no body', () async {
       adapter.reply = _requestJson();
       await api.materialRequests.cancel('mr1');
       expect(adapter.last!.path, '/material-requests/mr1/cancel');
       expect(adapter.capturedBody, isNull);
-
-      await api.materialRequests.close('mr1');
-      expect(adapter.last!.path, '/material-requests/mr1/close');
     });
 
-    test('returnItem → POST /:id/return with reason', () async {
+    test('close → POST /:id/close with bill images + optional note', () async {
       adapter.reply = _requestJson();
-      await api.materialRequests.returnItem('mr1', 'damaged');
-      expect(adapter.last!.path, '/material-requests/mr1/return');
-      expect(adapter.capturedBody, {'reason': 'damaged'});
+      await api.materialRequests.close(
+        'mr1',
+        billImages: ['material-requests/s1/bill.jpg'],
+        note: 'paid cash',
+      );
+      expect(adapter.last!.path, '/material-requests/mr1/close');
+      expect(adapter.capturedBody, {
+        'billImages': ['material-requests/s1/bill.jpg'],
+        'note': 'paid cash',
+      });
     });
   });
 
