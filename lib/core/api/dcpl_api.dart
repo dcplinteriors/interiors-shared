@@ -37,6 +37,11 @@ class MeApi {
     await _api.patch('/me', body: {'name': ?name, 'photoUrl': ?photoUrl})
         as Map<String, dynamic>,
   );
+
+  /// Clears the `mustChangePassword` flag after the supervisor has set their own
+  /// password (the password change itself happens client-side via Firebase).
+  Future<void> passwordChanged() async =>
+      _api.post('/me/password-changed');
 }
 
 /// `/supervisors` (admin).
@@ -44,21 +49,23 @@ class SupervisorsApi {
   const SupervisorsApi(this._api);
   final ApiClient _api;
 
-  Future<User> create({
+  /// Creates a supervisor from name + 10-digit phone. The backend provisions the
+  /// Firebase account (synthetic email derived from the phone) and returns the
+  /// supervisor plus a one-time [CreatedSupervisor.tempPassword] to hand over.
+  Future<CreatedSupervisor> create({
     required String name,
-    required String email,
-    String? phone,
-  }) async => User.fromJson(
-    await _api.post(
-          '/supervisors',
-          body: {
-            'name': name,
-            'email': email,
-            if (phone != null && phone.isNotEmpty) 'phone': phone,
-          },
-        )
+    required String phone,
+  }) async => CreatedSupervisor.fromJson(
+    await _api.post('/supervisors', body: {'name': name, 'phone': phone})
         as Map<String, dynamic>,
   );
+
+  /// Admin resets a supervisor's password to a fresh temporary one (re-arming
+  /// `mustChangePassword`). Returns the new temporary password to hand over.
+  Future<String> resetPassword(String uid) async {
+    final res = await _api.post('/supervisors/$uid/reset-password');
+    return (res as Map<String, dynamic>)['tempPassword'] as String;
+  }
 
   Future<Page<User>> list({int? limit, String? cursor}) async => Page.fromJson(
     await _api.get(
@@ -430,6 +437,21 @@ class MaterialRequestItemInput {
     'unit': unit,
     if (attachments.isNotEmpty) 'attachments': attachments.toJson(),
   };
+}
+
+/// Result of `POST /supervisors` — the created supervisor plus the one-time
+/// temporary password the admin must relay (it is never retrievable again).
+class CreatedSupervisor {
+  const CreatedSupervisor({required this.supervisor, required this.tempPassword});
+
+  factory CreatedSupervisor.fromJson(Map<String, dynamic> json) =>
+      CreatedSupervisor(
+        supervisor: User.fromJson(json),
+        tempPassword: json['tempPassword'] as String,
+      );
+
+  final User supervisor;
+  final String tempPassword;
 }
 
 /// Result of `POST /uploads/sign` — the signed PUT URL + the object path to persist.

@@ -105,15 +105,18 @@ void main() {
     });
     expect(me.isAdmin, isTrue);
     expect(me.name, '');
+    expect(me.mustChangePassword, isFalse);
 
     final sup = User.fromJson({
       'uid': 's1',
       'role': 'supervisor',
       'name': 'Ravi',
+      'mustChangePassword': true,
       'workOrders': ['WO A', 'WO B'],
     });
     expect(sup.isSupervisor, isTrue);
     expect(sup.workOrders, ['WO A', 'WO B']);
+    expect(sup.mustChangePassword, isTrue);
   });
 
   test('Page.fromJson parses items + nextCursor', () {

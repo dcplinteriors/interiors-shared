@@ -13,6 +13,7 @@ class User {
     this.photoUrl,
     this.isActive,
     this.createdAt,
+    this.mustChangePassword = false,
     this.workOrders = const [],
   });
 
@@ -25,6 +26,7 @@ class User {
     photoUrl: json['photoUrl'] as String?,
     isActive: json['isActive'] as bool?,
     createdAt: json['createdAt'] as String?,
+    mustChangePassword: json['mustChangePassword'] as bool? ?? false,
     workOrders:
         (json['workOrders'] as List?)?.map((e) => e as String).toList() ??
         const [],
@@ -38,6 +40,10 @@ class User {
   final String? photoUrl;
   final bool? isActive;
   final String? createdAt;
+
+  /// Supervisor was issued a temporary password (on create / admin reset) and
+  /// must set their own before using the app. Always false for admins.
+  final bool mustChangePassword;
 
   /// Names of the work orders currently assigned to this supervisor (supervisor list only).
   final List<String> workOrders;

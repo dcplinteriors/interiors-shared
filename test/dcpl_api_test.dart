@@ -125,15 +125,48 @@ void main() {
       expect(adapter.last!.path, '/me');
       expect(adapter.capturedBody, {'name': 'Ravi'});
     });
+
+    test('get parses mustChangePassword', () async {
+      adapter.reply = {..._userJson(), 'mustChangePassword': true};
+      final u = await api.me.get();
+      expect(u.mustChangePassword, isTrue);
+    });
+
+    test('get defaults mustChangePassword to false', () async {
+      adapter.reply = _userJson(role: 'admin');
+      final u = await api.me.get();
+      expect(u.mustChangePassword, isFalse);
+    });
+
+    test('passwordChanged → POST /me/password-changed, no body', () async {
+      adapter.reply = <String, dynamic>{};
+      await api.me.passwordChanged();
+      expect(adapter.last!.method, 'POST');
+      expect(adapter.last!.path, '/me/password-changed');
+      expect(adapter.capturedBody, isNull);
+    });
   });
 
   group('supervisors', () {
-    test('create → POST /supervisors, omits empty phone', () async {
-      adapter.reply = _userJson();
-      await api.supervisors.create(name: 'Ravi', email: 'r@x.test');
+    test('create → POST /supervisors with name + phone, returns tempPassword',
+        () async {
+      adapter.reply = {..._userJson(), 'tempPassword': 'Xy7-temp'};
+      final res = await api.supervisors.create(name: 'Ravi', phone: '9876543210');
       expect(adapter.last!.method, 'POST');
       expect(adapter.last!.path, '/supervisors');
-      expect(adapter.capturedBody, {'name': 'Ravi', 'email': 'r@x.test'});
+      expect(adapter.capturedBody, {'name': 'Ravi', 'phone': '9876543210'});
+      expect(res.supervisor.name, 'Ravi');
+      expect(res.tempPassword, 'Xy7-temp');
+    });
+
+    test('resetPassword → POST /:uid/reset-password, unwraps tempPassword',
+        () async {
+      adapter.reply = {'tempPassword': 'New-pw9'};
+      final pw = await api.supervisors.resetPassword('s1');
+      expect(adapter.last!.method, 'POST');
+      expect(adapter.last!.path, '/supervisors/s1/reset-password');
+      expect(adapter.capturedBody, isNull);
+      expect(pw, 'New-pw9');
     });
 
     test('list → GET /supervisors with pagination, parses Page', () async {
